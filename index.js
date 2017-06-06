@@ -1,8 +1,6 @@
 const addItemForm = document.querySelector('#addItemForm');
 const foodList = document.querySelector('#foodList');
 
-let foods = [];
-
 function makeItem(foodName){
 
     const newItem = document.createElement('li');
@@ -26,16 +24,23 @@ function addItem(ev){
     const food = makeItem(foodName);
 
     food.querySelector('.btnDelete').addEventListener('click', deleteItem);
-   // foods.push(makeItem(foodName));
+    food.querySelector('.btnPromote').addEventListener('click', promoteItem);
+}
 
+function promoteItem(){
+    const foodItem = this.parentNode.querySelector('.foodName');
+
+    if(foodItem.classList.contains('promoted')){
+        foodItem.classList.remove('promoted');
+    }
+    else{
+        foodItem.classList.add('promoted');
+    }
 }
 
 function deleteItem(){
-    console.log(this.parentNode);
-    console.log(this.parentNode.parentNode);
     const foodItem = this.parentNode.parentNode;
     foodList.removeChild(foodItem);
-
 }
 
 addItemForm.addEventListener('submit', addItem);

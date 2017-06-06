@@ -11,6 +11,18 @@ body{
     background: linear-gradient(to right, #cb356b, #bd3f32); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
+button{
+    border: 0;
+    padding: 10px;
+    color: #cb356b;
+}
+
+.logo{
+    display: block;
+    max-width: 500px;
+    margin: 60px auto;
+}
+
 #main{
     width: 1300px;
     min-height: 100vh;
@@ -40,6 +52,7 @@ body{
 #addItemForm button{
     width: 240px;
     padding: 15px 5px;
+    background-color: #FFF;
 }
 
 
@@ -81,18 +94,26 @@ body{
 }
 
 .btnDelete{
-    display: inline-block;
     width: 100px;
 }
 
 .btnPromote{
-    display: inline-block;
     width: 100px;
 }
 
+.foodItem button{
+    display: inline-block;
+    background-color: #FFF;
+    border-radius: 12px;
+    padding: 15px 0px;
+    transition: border-radius .25s ease-out;
+}
+
+.foodItem button:hover{
+    border-radius: 0px;
+}
 
 .promoted{
     background: rgba(255, 255, 255, .34);
-    /*border: 1px solid #cb356b;*/
 }
 

@@ -1,10 +1,10 @@
 # List of Food
 
-## Add Item
+### Add Item
 Add an item to the list of food
 
-## Delete Item
+### Delete Item
 Removes an item from the list
 
-## Promote Item
+### Promote Item
 Highlights an item for easier viewing

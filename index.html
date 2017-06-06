@@ -10,14 +10,25 @@
     <body>
         
         <!--  Add new Item  !-->
-        
+        <form id="addItemForm">
+            <input type="text" name="newFood" value="New Food"></input>
+            <button type="submit" id="addItemBtn">Add</button>
+        </form>
         
         
 
 
         <!--  Show List  !-->
+        <ul>
+            <a><li>
+                <div class="foodItem">
+                    <p class="foodName">Pizza</p>
+                    <button class="btnDelete">Delete</button>
+                    <button class="btnPromote">Promote</button>
+                </div>
+            </li></a>
+        </ul>
 
-
-
+        <script type="text/javascript" src="index.js"></script>
     </body>
 </html>

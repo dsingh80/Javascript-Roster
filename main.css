@@ -1,0 +1,44 @@
+html{
+    font-family: "Arial", "Sans", "Georgia", serif;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+#foodList{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 1280px;
+    margin: auto;
+    
+}
+
+#foodList li{
+    text-decoration: none;
+    text-align: center;
+}
+
+.foodItem{
+    display: block;
+    width: 100%;
+}
+
+.foodName{
+    display: inline-block;
+    width: 1000px;
+    text-align: left;
+}
+
+.btnDelete{
+    display: inline-block;
+    width: 100px;
+}
+
+.btnPromote{
+    display: inline-block;
+    width: 100px;
+}
+

@@ -23,11 +23,19 @@ function addItem(ev){
     ev.preventDefault();
 
     const foodName = addItemForm.foodName.value;
-    foods.push(makeItem(foodName));
-    console.log(foods);
+    const food = makeItem(foodName);
+
+    food.querySelector('.btnDelete').addEventListener('click', deleteItem);
+   // foods.push(makeItem(foodName));
 
 }
 
+function deleteItem(){
+    console.log(this.parentNode);
+    console.log(this.parentNode.parentNode);
+    const foodItem = this.parentNode.parentNode;
+    foodList.removeChild(foodItem);
+
+}
 
 addItemForm.addEventListener('submit', addItem);
-

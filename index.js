@@ -1,5 +1,4 @@
 const addItemForm = document.querySelector('#addItemForm');
-const foodList = document.querySelector('#foodList');
 
 function makeItem(foodName){
 
@@ -13,7 +12,7 @@ function makeItem(foodName){
         </div>
     `;
 
-    foodList.appendChild(newItem);
+    foodList.prepend(newItem);
     return newItem;
 }
 
@@ -28,7 +27,7 @@ function addItem(ev){
 }
 
 function promoteItem(){
-    const foodItem = this.parentNode.querySelector('.foodName');
+    const foodItem = this.parentNode;  //.querySelector('.foodName');
 
     if(foodItem.classList.contains('promoted')){
         foodItem.classList.remove('promoted');
@@ -39,6 +38,8 @@ function promoteItem(){
 }
 
 function deleteItem(){
+    const foodList = document.querySelector('#foodList');
+    
     const foodItem = this.parentNode.parentNode;
     foodList.removeChild(foodItem);
 }

@@ -1,47 +1,104 @@
-const addItemForm = document.querySelector('#addItemForm');
+const JavascriptRoster = {
 
-function makeItem(foodName){
+    foodItemsList: [],
+    numFoods: 0,
 
-    const newItem = document.createElement('li');
+    init: function(formSelector){
+        //this.loadList();
+        document.querySelector(formSelector).addEventListener('submit', this.addItem.bind(this));
+        this.getFoodList = this.getFoodList.bind(this);
+    },
 
-    newItem.innerHTML = `
-        <div class="foodItem">
-            <p class="foodName">${foodName}</p>
-            <button class="btnDelete">Delete</button>
-            <button class="btnPromote">Promote</button>
-        </div>
-    `;
+    getFoodList: function(){
+        return this.foodItemsList;
+    },
 
-    foodList.prepend(newItem);
-    return newItem;
-}
+    addItem: function(ev){
+        ev.preventDefault();
 
-function addItem(ev){
-    ev.preventDefault();
+        const foodName = addItemForm.foodName.value;
+        if(foodName == "" || foodName==null){
+            alert("Please enter a food name!");
+            return;
+        }
+        const makeItemFunc = this.makeItem.bind(this);
+        const food = makeItemFunc(foodName);
 
-    const foodName = addItemForm.foodName.value;
-    const food = makeItem(foodName);
+        this.foodItemsList.push(food.dataset.key);
+        
+        food.querySelector('.btnDelete').addEventListener('click', this.deleteItem.bind(this));
+        food.querySelector('.btnPromote').addEventListener('click', this.promoteItem);
+        food.querySelector('.btnUp').addEventListener('click', this.moveItemUp.bind(this));
+        food.querySelector('.btnDown').addEventListener('click', this.moveItemDown.bind(this));
 
-    food.querySelector('.btnDelete').addEventListener('click', deleteItem);
-    food.querySelector('.btnPromote').addEventListener('click', promoteItem);
-}
+    },
 
-function promoteItem(){
-    const foodItem = this.parentNode;  //.querySelector('.foodName');
+    makeItem: function(foodName){
+        const newItem = document.createElement('li');
+        newItem.dataset.key = this.numFoods.toString();
+        this.numFoods++;
 
-    if(foodItem.classList.contains('promoted')){
-        foodItem.classList.remove('promoted');
+        newItem.innerHTML = `
+            <div class="foodItem">
+                <p class="foodName">${foodName}</p>
+                <button class="btnDelete">Delete</button>
+                <button class="btnPromote">Promote</button>
+                <button class="btnUp">Up</button>
+                <button class="btnDown">Down</button>
+            </div>
+        `;
+
+        foodList.prepend(newItem);
+        return newItem;
+    },
+
+    promoteItem: function(){
+        const foodItem = this.parentNode;  //.querySelector('.foodName');
+
+        if(foodItem.classList.contains('promoted')){
+            foodItem.classList.remove('promoted');
+        }
+        else{
+            foodItem.classList.add('promoted');
+        }
+    },
+
+    deleteItem: function(ev){
+        const targ = ev.target;
+        const foodList = document.querySelector('#foodList');
+        
+        const foodItem = targ.parentNode.parentNode;
+
+        const index = this.foodItemsList.indexOf(foodItem.dataset.key);
+        if(index > -1){
+            this.foodItemsList.splice(index, 1); // remove from array
+            this.numFoods--;
+        }
+        else{
+            console.log("Food not found in array!");
+        }
+
+        foodList.removeChild(foodItem);
+    },
+
+    moveItemUp: function(ev){
+        const targ = ev.target;
+
+        
+    },
+
+    moveItemDown: function(ev){
+        const targ = ev.target;
+
+    },
+
+    saveList: function(){
+        localStorage.setItem('foodRosterList', JSON.stringify(this.foods));
+    },
+
+    loadList: function(){
+        localStorage.getItem('foodRosterList');
     }
-    else{
-        foodItem.classList.add('promoted');
-    }
 }
 
-function deleteItem(){
-    const foodList = document.querySelector('#foodList');
-    
-    const foodItem = this.parentNode.parentNode;
-    foodList.removeChild(foodItem);
-}
-
-addItemForm.addEventListener('submit', addItem);
+JavascriptRoster.init('#addItemForm');

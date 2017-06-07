@@ -29,7 +29,7 @@ const JavascriptRoster = {
         this.saveList();
 
         food.querySelector('.btnDelete').addEventListener('click', this.deleteItem.bind(this));
-        food.querySelector('.btnPromote').addEventListener('click', this.promoteItem);
+        food.querySelector('.btnPromote').addEventListener('click', this.promoteItem.bind(this));
         food.querySelector('.btnUp').addEventListener('click', this.moveItemUp.bind(this));
         food.querySelector('.btnDown').addEventListener('click', this.moveItemDown.bind(this));
 
@@ -80,6 +80,7 @@ const JavascriptRoster = {
             foodItem.parentNode.dataset.key = foodItem.parentNode.dataset.key + "_0ea7034b";
         }
         
+        console.log(this);
         this.saveList();
 
     },
@@ -153,13 +154,12 @@ const JavascriptRoster = {
     },
 
     saveList: function(){
-        
+        // Save current session
         const foodList = document.querySelector('#foodList');
         const listItems = foodList.children;
 
-        for(let i=0; i<listItems.length-1; i++){
-            this.foodItemsList[i] = listItems[i].dataset.key;
-            console.log(this.foodItemsList[i]);
+        for(let i=0; i<listItems.length; i++){
+            this.foodItemsList[i] = listItems[listItems.length-1-i].dataset.key;
         }
 
         localStorage.setItem('foodRosterList', JSON.stringify(this.foodItemsList));
@@ -170,19 +170,27 @@ const JavascriptRoster = {
         // Load the previous session
 
         const rawdata = JSON.parse(localStorage.getItem('foodRosterList'));
+
+        if(rawdata == null)
+            return null;
+
         let key = "";
         let newItem = null;
-        console.log(rawdata);
-        for(let i=0; i<rawdata.length; i++){
-            key = rawdata[i];
-            if(key.endsWith("_0ea7034b")){
-                newItem = this.addItem2(key.substr(0, key.length-10)).firstChild;
-                newItem.classList.add('promoted');
-            }
-            else
-                this.addItem2(key);
-        }
 
+        for(let i=0; i<rawdata.length; i++){
+
+            key = rawdata[i];
+
+            if(key.endsWith("_0ea7034b")){
+                newItem = this.addItem2(key.substr(0, key.length-9));
+                newItem.children[0].classList.add('promoted');
+            }
+            else{
+                this.addItem2(key);
+            }
+
+
+        }
     }
 }
 

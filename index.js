@@ -4,7 +4,7 @@ const JavascriptRoster = {
     numFoods: 0,
 
     init: function(formSelector){
-        //this.loadList();
+        this.loadList();
         document.querySelector(formSelector).addEventListener('submit', this.addItem.bind(this));
         this.getFoodList = this.getFoodList.bind(this);
     },
@@ -26,6 +26,8 @@ const JavascriptRoster = {
 
         this.foodItemsList.push(food.dataset.key);
         
+        this.saveList();
+
         food.querySelector('.btnDelete').addEventListener('click', this.deleteItem.bind(this));
         food.querySelector('.btnPromote').addEventListener('click', this.promoteItem);
         food.querySelector('.btnUp').addEventListener('click', this.moveItemUp.bind(this));
@@ -33,9 +35,23 @@ const JavascriptRoster = {
 
     },
 
+    addItem2: function(foodName){
+        const makeItemFunc = this.makeItem.bind(this);
+        const food = makeItemFunc(foodName);
+
+        this.foodItemsList.push(food.dataset.key);
+
+        food.querySelector('.btnDelete').addEventListener('click', this.deleteItem.bind(this));
+        food.querySelector('.btnPromote').addEventListener('click', this.promoteItem.bind(this));
+        food.querySelector('.btnUp').addEventListener('click', this.moveItemUp.bind(this));
+        food.querySelector('.btnDown').addEventListener('click', this.moveItemDown.bind(this));
+
+        return food;
+    },
+
     makeItem: function(foodName){
         const newItem = document.createElement('li');
-        newItem.dataset.key = this.numFoods.toString();
+        newItem.dataset.key = foodName; //this.numFoods.toString();
         this.numFoods++;
 
         newItem.innerHTML = `
@@ -52,15 +68,20 @@ const JavascriptRoster = {
         return newItem;
     },
 
-    promoteItem: function(){
-        const foodItem = this.parentNode;  //.querySelector('.foodName');
+    promoteItem: function(ev){
+        const foodItem = ev.target.parentNode;  //.querySelector('.foodName');
 
         if(foodItem.classList.contains('promoted')){
             foodItem.classList.remove('promoted');
+            foodItem.parentNode.dataset.key = foodItem.parentNode.dataset.key - "_0ea7034b";
         }
         else{
             foodItem.classList.add('promoted');
+            foodItem.parentNode.dataset.key = foodItem.parentNode.dataset.key + "_0ea7034b";
         }
+        
+        this.saveList();
+
     },
 
     deleteItem: function(ev){
@@ -79,25 +100,89 @@ const JavascriptRoster = {
         }
 
         foodList.removeChild(foodItem);
+
+        this.saveList();
     },
 
     moveItemUp: function(ev){
         const targ = ev.target;
 
+        const foodList = document.querySelector('#foodList');
         
+        const currentItem = targ.parentNode.parentNode;
+        const currentKey = currentItem.dataset.key;
+        const currentIndex = this.foodItemsList.indexOf(currentKey);
+
+        if(currentIndex >= this.foodItemsList.length-1)
+            return;
+
+        const replaceKey = this.foodItemsList[currentIndex+1];
+        const replaceItem = currentItem.previousElementSibling;
+        
+        foodList.insertBefore(currentItem, replaceItem);
+        
+        this.foodItemsList[currentIndex] = replaceKey;
+        this.foodItemsList[currentIndex+1] = currentKey;
+
+        this.saveList();
+
     },
 
     moveItemDown: function(ev){
         const targ = ev.target;
 
+        const foodList = document.querySelector('#foodList');
+        
+        const currentItem = targ.parentNode.parentNode;
+        const currentKey = currentItem.dataset.key;
+        const currentIndex = this.foodItemsList.indexOf(currentKey);
+
+        if(currentIndex <= 0)
+            return;
+
+        const replaceKey = this.foodItemsList[currentIndex-1];
+        const replaceItem = currentItem.nextElementSibling;
+        
+        foodList.insertBefore(currentItem, replaceItem.nextElementSibling);
+        
+        this.foodItemsList[currentIndex] = replaceKey;
+        this.foodItemsList[currentIndex-1] = currentKey;
+
+        this.saveList();
+
     },
 
     saveList: function(){
-        localStorage.setItem('foodRosterList', JSON.stringify(this.foods));
+        
+        const foodList = document.querySelector('#foodList');
+        const listItems = foodList.children;
+
+        for(let i=0; i<listItems.length-1; i++){
+            this.foodItemsList[i] = listItems[i].dataset.key;
+            console.log(this.foodItemsList[i]);
+        }
+
+        localStorage.setItem('foodRosterList', JSON.stringify(this.foodItemsList));
+        
     },
 
     loadList: function(){
-        localStorage.getItem('foodRosterList');
+        // Load the previous session
+
+        const rawdata = JSON.parse(localStorage.getItem('foodRosterList'));
+        let key = "";
+        let newItem = null;
+        console.log(rawdata);
+        for(let i=0; i<rawdata.length; i++){
+            key = rawdata[i];
+            if(key.endsWith("_0ea7034b")){
+                newItem = this.addItem2(key.substr(0, key.length-10)).firstChild;
+                newItem.classList.add('promoted');
+            }
+            else
+                this.addItem2(key);
+        }
+
     }
 }
 

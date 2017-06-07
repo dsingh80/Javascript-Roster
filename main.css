@@ -98,28 +98,47 @@ button{
     width: 100px;
 }
 
+.btnDelete:hover{
+    background-color: #cb356b;
+}
+
 .btnPromote{
     width: 100px;
+}
+
+.btnPromote:hover{
+    background-color: #35CB41;
 }
 
 .btnUp{
     width: 50px;
 }
 
+.btnUp:hover{
+    background-color: #187F98;
+}
+
 .btnDown{
     width: 50px;
 }
+
+.btnDown:hover{
+    background-color: #187F98;
+}
+
 
 .foodItem button{
     display: inline-block;
     background-color: #FFF;
     border-radius: 12px;
     padding: 15px 0px;
-    transition: border-radius .25s ease-out;
+    transition: border-radius .2s ease-out;
+    transition: background-color .15s cubic-bezier(0.47, 0, 0.745, 0.715);
 }
 
 .foodItem button:hover{
     border-radius: 0px;
+    color: #FFF;
 }
 
 .promoted{
